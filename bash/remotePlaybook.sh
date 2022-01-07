@@ -42,6 +42,7 @@ if test -f "$fileName"; then
     ansible-playbook $fileName;
 else 
     echo "Unable to find file";
+    rm -r /tmp/playbook -f;
     exit 1;
 fi
 
