@@ -48,5 +48,4 @@
   - name: Ensure that file size is a whole positive number
     assert:
       that:
-        - size | type_debug == "int"
         - size is regex("^[0-9]+$")
