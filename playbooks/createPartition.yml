@@ -14,3 +14,7 @@
       state: present
       part_start: "{% if device_info.partitions is defined and device_info.partitions|length > 0 %}{{ device_info.partitions[-1].end + 1 }}MiB{% else %}0%{% endif %}"
       part_end: "{% if device_info.partitions is defined and device_info.partitions|length > 0 %}{{ device_info.partitions[-1].end + 2049 }}MiB{% else %}2GiB{% endif %}"
+  - name: format the new partition to xfs
+    filesystem:
+     fstype: xfs
+     dev: "/dev/xvdf{{device_info.partitions | length }}"
