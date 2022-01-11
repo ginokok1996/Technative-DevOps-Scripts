@@ -30,7 +30,7 @@
   # Mounts the newly created partition
   - name: Mount new partition
     mount:
-      fstype: cfs
+      fstype: xfs
       src: "/dev/xvdf{{ device_info.partitions | length + 1 }}"
       path: "/mt/xvdf{{ device_info.partitions | length + 1}}"
       state: mounted
