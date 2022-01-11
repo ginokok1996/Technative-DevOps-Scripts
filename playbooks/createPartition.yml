@@ -1,20 +1,52 @@
 ---
-- name: Create partition
+- name: Create partition & add default directories 
   hosts: all
   become: true
 
   tasks:
+  # Retrieve the device info so we can define the number, part_start & part_end for the partition
   - name: Read device information of /dev/xvdf
     parted: device=/dev/xvdf unit=MiB
     register: device_info
+  # Create a 2GB partition
   - name: Create a new primary partition with a size of 2GB
     parted:
       device: /dev/xvdf
       number: "{{ device_info.partitions | length + 1 }}"
       state: present
-      part_start: "{% if device_info.partitions is defined and device_info.partitions | length > 0 %}{{ device_info.partitions[-1].end + 1 }}MiB{% else %}0%{% endif %}"
-      part_end: "{% if device_info.partitions is defined and device_info.partitions | length > 0 %}{{ device_info.partitions[-1].end + 2049 }}MiB{% else %}2GiB{% endif %}"
+      part_start: "{% if device_info.partitions | length > 0 %}{{ device_info.partitions[-1].end + 1 }}MiB{% else %}0%{% endif %}"
+      part_end: "{% if device_info.partitions | length > 0 %}{{ device_info.partitions[-1].end + 2049 }}MiB{% else %}2GiB{% endif %}"
+  # Formats the new partition to XFS
   - name: format the new partition to xfs
     filesystem:
      fstype: xfs
      dev: "/dev/xvdf{{ device_info.partitions | length + 1 }}"
+  # Creates a mount directory for the new partition
+  - name: Create a mount directory
+    file:
+      path: "/mt/xvdf{{ device_info.partitions | length + 1}}"
+      state: directory
+      mode: '0755'
+  # Mounts the newly created partition
+  - name: Mount new partition
+    mount:
+      fstype: cfs
+      src: "/dev/xvdf{{ device_info.partitions | length + 1 }}"
+      path: "/mt/xvdf{{ device_info.partitions | length + 1}}"
+      state: mounted
+  # These tasks ensure we have the default directories
+  - name: Create /appl directory
+    file:
+      path: "/mt/xvdf{{ device_info.partitions | length + 1}}/appl"
+      state: directory
+      mode: '0755'
+  - name: Create /apps directory
+    file:
+      path: "/mt/xvdf{{ device_info.partitions | length + 1}}/apps"
+      state: directory
+      mode: '0755'
+  - name: Create /data directory
+    file:
+      path: "/mt/xvdf{{ device_info.partitions | length + 1}}/data"
+      state: directory
+      mode: '0755'

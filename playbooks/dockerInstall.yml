@@ -4,11 +4,13 @@
   become: true
 
   tasks:
+  # Make sure we have the latest yum utils version
   - name: Install yum utils
     yum:
       name: 
         - yum-utils
       state: latest
+  # Adds the docker-ce repository to the machine
   - name: creating a docker repository
     yum_repository:
       description: repo for docker
@@ -16,6 +18,7 @@
       baseurl: https://download.docker.com/linux/centos/8/x86_64/stable/
       gpgkey: https://download.docker.com/linux/centos/gpg
       gpgcheck: yes
+  # Installs docker on the machine
   - name: install docker-ce
     yum:
       name:
@@ -23,10 +26,13 @@
         - docker-ce-cli
         - containerd.io
       state: present
+  # Retrieves the docker version
   - name: get docker version
     shell: "docker -v"
     register: version
+  # Prints out the installed docker version
   - debug: var=version.stdout
+  # Starts the docker service and enables docker on boot
   - name: Start Docker service
     service:
       name: docker
