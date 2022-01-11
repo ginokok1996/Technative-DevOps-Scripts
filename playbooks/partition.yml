@@ -8,9 +8,9 @@
   - name: Read device information of /dev/xvdf
     parted: device=/dev/xvdf unit=MiB
     register: device_info
-  # Retrieves fdisk list
-  - name: get fdisk list
-    shell: "fdisk -l"
+  # Retrieves disk list
+  - name: get disk list
+    shell: "parted -l"
     register: disks
   # Prints out the available disks
-  - debug: var=disks
+  - debug: var=disks.stdout_lines
