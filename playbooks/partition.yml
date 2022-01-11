@@ -13,4 +13,7 @@
     shell: "parted -l"
     register: disks
   # Prints out the available disks
-  - debug: var=disks.stdout_lines
+  - debug:
+      msg: "{{ disks.stderr.split('\n') }}"
+  - debug:
+      msg: "{{ disks.stdout.split('\n') }}"
