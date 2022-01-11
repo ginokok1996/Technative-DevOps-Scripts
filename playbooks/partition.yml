@@ -14,4 +14,4 @@
     register: disks
   # Prints out the available disks
   - debug:
-      msg: "{{ disks.stdout.split('\n') }} | sed -En 's/\"\",\\|,//'"
+      msg: "{{ disks.stdout.split('\n') }}"
