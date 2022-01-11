@@ -48,4 +48,4 @@
   - name: Ensure that file size is a whole positive number
     assert:
       that:
-        - size is regex("^[0-9]+$")
+        - "{{ size }} is regex('^[0-9]+$')"
