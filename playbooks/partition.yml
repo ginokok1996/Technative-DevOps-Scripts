@@ -25,6 +25,8 @@
   - set_fact:
       device: "{{ result.user_input }}"
     no_log: true
+  - name: Check if disk exists
+    shell: "ls {{ device }}"
   - debug:
       msg: "Using device: {{ device }}"
   - name: get free space of chosen device
