@@ -41,9 +41,9 @@
   - pause:
       prompt: "Please provide partition size in MB format"
       echo: yes
-    register: size
+    register: result
   - set_fact:
-      device: "{{ size.user_input }}"
+      size: "{{ result.user_input }}"
     no_log: true
   - name: Ensure that file size is a whole positive number
     assert:
