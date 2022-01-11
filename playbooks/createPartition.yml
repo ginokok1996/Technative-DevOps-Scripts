@@ -60,7 +60,7 @@
       number: "{{ device_info.partitions | length + 1 }}"
       state: present
       part_start: "{% if device_info.partitions | length > 0 %}{{ device_info.partitions[-1].end + 1 }}MiB{% else %}0%{% endif %}"
-      part_end: "{% if device_info.partitions | length > 0 %}{{ device_info.partitions[-1].end + 1 + size }}MiB{% else %}{{ size }}MiB{% endif %}"
+      part_end: "{% if device_info.partitions | length > 0 %}{{ device_info.partitions[-1].end + 1 + size | int }}MiB{% else %}{{ size | int }}MiB{% endif %}"
   # Formats the new partition to XFS
   - name: format the new partition to xfs
     filesystem:
