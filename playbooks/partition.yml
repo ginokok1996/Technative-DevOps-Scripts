@@ -31,4 +31,4 @@
     shell: "parted {{ device }} unit MB print free | grep 'Free Space' | tail -n1 | awk '{print \"Free space: \" $3}'"
     register: freeSpace
   - debug:
-    var: freeSpace
+      var: freeSpace
