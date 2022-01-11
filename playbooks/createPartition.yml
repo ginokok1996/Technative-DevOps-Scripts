@@ -32,21 +32,21 @@
     mount:
       fstype: xfs
       src: "/dev/xvdf{{ device_info.partitions | length + 1 }}"
-      path: "/mt/xvdf{{ device_info.partitions | length + 1}}"
+      path: "/mt/xvdf{{ device_info.partitions | length + 1 }}"
       state: mounted
   # These tasks ensure we have the default directories
   - name: Create /appl directory
     file:
-      path: "/mt/xvdf{{ device_info.partitions | length + 1}}/appl"
+      path: "/mt/xvdf{{ device_info.partitions | length + 1 }}/appl"
       state: directory
       mode: '0755'
   - name: Create /apps directory
     file:
-      path: "/mt/xvdf{{ device_info.partitions | length + 1}}/apps"
+      path: "/mt/xvdf{{ device_info.partitions | length + 1 }}/apps"
       state: directory
       mode: '0755'
   - name: Create /data directory
     file:
-      path: "/mt/xvdf{{ device_info.partitions | length + 1}}/data"
+      path: "/mt/xvdf{{ device_info.partitions | length + 1 }}/data"
       state: directory
       mode: '0755'
