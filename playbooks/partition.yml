@@ -26,9 +26,9 @@
       device: "{{ result.user_input }}"
     no_log: true
   - debug:
-      var: device
+      msg: "Using device: {{ device }}"
   - name: get free space of chosen device
     shell: "parted {{ device }} unit MB print free | grep 'Free Space' | tail -n1 | awk '{print \"Free space: \" $3}'"
     register: freeSpace
   - debug:
-      var: freeSpace.stdout
+      msg: "{{ freeSpace.stdout }}"
