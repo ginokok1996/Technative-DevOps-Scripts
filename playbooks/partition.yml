@@ -1,0 +1,10 @@
+---
+- name: Create partition
+  hosts: all
+  become: true
+
+  tasks:
+  # Retrieve the device info so we can define the number, part_start & part_end for the partition
+  - name: Read device information of /dev/xvdf
+    parted: device=/dev/xvdf unit=MiB
+    register: device_info
