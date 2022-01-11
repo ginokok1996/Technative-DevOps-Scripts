@@ -6,10 +6,11 @@
   tasks:
   - name: Read device information of /dev/xvdf
     parted: device=/dev/xvdf unit=MiB
-    register: sdb_info
+    register: device_info
   - name: Create a new primary partition with a size of 2GB
     parted:
       device: /dev/xvdf
-      number: "{{ sdb_info.partitions | length + 1 }}"
+      number: "{{ device_info.partitions | length + 1 }}"
       state: present
+      part_start: "{% if device_info.partitions is defined and device_info.partitions|length > 0 %}{{ device_info.partitions[-1].end + 1 }}MiB{% else %}0%{% endif %}"
       part_end: 2GiB
