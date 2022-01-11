@@ -13,5 +13,14 @@
     shell: "parted -l"
     register: disks
   # Prints out the available disks
-  - debug:
+  - name: Display parted list
+    debug:
       msg: "{{ disks.stdout.split('\n') }}"
+  - pause:
+      prompt: "Please enter the device name you wish to use"
+      echo: yes
+    register: result
+  - set_fact:
+      device: "{{ result.user_input }}"
+  - debug:
+      var: device
