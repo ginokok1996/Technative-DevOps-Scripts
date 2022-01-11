@@ -45,6 +45,7 @@
   - set_fact:
       size: "{{ result.user_input }}"
     no_log: true
+  # make sure the user provided an whole positive integer
   - name: Ensure that file size is a whole positive number
     assert:
       that:

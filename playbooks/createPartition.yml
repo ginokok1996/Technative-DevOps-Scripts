@@ -37,14 +37,20 @@
     register: freeSpace
   - debug:
       msg: "{{ freeSpace.stdout }}"
-  # retrieve what disk needs to be used
+  # retrieve what partition size needs to be used
   - pause:
       prompt: "Please provide partition size in MB format"
       echo: yes
-    register: size
+    register: result
   - set_fact:
-      device: "{{ size.user_input }}"
+      size: "{{ result.user_input }}"
     no_log: true
+  # make sure the user provided an whole positive integer
+  - name: Ensure that file size is a whole positive number
+    assert:
+      that:
+        - "{{ size }} | type_debug == 'int'"
+        - "{{ size }} is regex('^[0-9]+$')"
   # Create a partition with the provided size
   - name: Create a new primary partition with provided size
     parted:
