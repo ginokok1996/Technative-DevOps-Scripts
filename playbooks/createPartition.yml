@@ -1,5 +1,5 @@
 ---
-- name: Install Docker
+- name: Create partition
   hosts: all
   become: true
 
@@ -13,4 +13,4 @@
       number: "{{ device_info.partitions | length + 1 }}"
       state: present
       part_start: "{% if device_info.partitions is defined and device_info.partitions|length > 0 %}{{ device_info.partitions[-1].end + 1 }}MiB{% else %}0%{% endif %}"
-      part_end: 2GiB
+      part_end: "{% if device_info.partitions is defined and device_info.partitions|length > 0 %}{{ device_info.partitions[-1].end + 2049 }}MiB{% else %}2GiB{% endif %}"
