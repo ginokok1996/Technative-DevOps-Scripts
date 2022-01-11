@@ -13,4 +13,4 @@
     shell: "fdisk -l"
     register: disks
   # Prints out the available disks
-  - debug: var=disks.stdout
+  - debug: var=disks
