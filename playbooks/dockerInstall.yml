@@ -10,6 +10,7 @@
       name: 
         - yum-utils
       state: latest
+
   # Adds the docker-ce repository to the machine
   - name: creating a docker repository
     yum_repository:
@@ -18,6 +19,7 @@
       baseurl: https://download.docker.com/linux/centos/8/x86_64/stable/
       gpgkey: https://download.docker.com/linux/centos/gpg
       gpgcheck: yes
+
   # Installs docker on the machine
   - name: install docker-ce
     yum:
@@ -30,8 +32,10 @@
   - name: get docker version
     shell: "docker -v"
     register: version
+
   # Prints out the installed docker version
   - debug: var=version.stdout
+  
   # Starts the docker service and enables docker on boot
   - name: Start Docker service
     service:

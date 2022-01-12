@@ -1,0 +1,12 @@
+---
+- name: Install Docker
+  hosts: all
+  become: true
+
+  tasks:
+  # Make sure we have the latest yum utils version
+  - name: Install yum utils
+    yum:
+      name: 
+        - yum-utils
+      state: latest
