@@ -20,7 +20,7 @@ fi
 if [ -z "$fileName" ]
 then
       echo "fileName flag is empty defaulting to playbook.yml";
-      filename="playbook.yml";
+      filename="main.yml";
 fi
 
 # Retrieve the repository name
