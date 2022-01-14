@@ -35,7 +35,7 @@
     shell: "parted {{ device }} unit MB print free | grep 'unrecognized disk label'"
     register: labelError
   - debug:
-    msg: "{{ labelError.stdout }}"
+      msg: "{{ labelError.stdout }}"
 
 
   # # Retrieve the device info so we can define the number, part_start & part_end for the partition
