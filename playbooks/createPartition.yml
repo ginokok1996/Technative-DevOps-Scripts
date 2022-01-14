@@ -49,7 +49,10 @@
   # create disk label if not present
   - name: Create disk label if not present
     shell: "parted {{ device }} {{ label }}"
+    register: outputTest
     when: labelError.stdout != ""
+  - debug:
+      msg: "{{ outputTest.stdout }}"
 
   # # Retrieve the device info so we can define the number, part_start & part_end for the partition
   # - name: Read device information of chosen device
