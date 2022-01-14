@@ -84,80 +84,77 @@
     no_log: true
     when: device_info.partitions | length == 0
 
+  # get and show available disk space
+  - name: get free space of chosen device
+    shell: "parted {{ device }} unit MB print free | grep 'Free Space' | tail -n1 | awk '{print \"Free space: \" $3}'"
+    register: freeSpace
   - debug:
-      msg: "{{ device_info.partitions[-1].fstype }}"
-    when: device_info.partitions | length > 0
-  # # get and show available disk space
-  # - name: get free space of chosen device
-  #   shell: "parted {{ device }} unit MB print free | grep 'Free Space' | tail -n1 | awk '{print \"Free space: \" $3}'"
-  #   register: freeSpace
-  # - debug:
-  #     msg: "{{ freeSpace.stdout }}"
+      msg: "{{ freeSpace.stdout }}"
 
-  # # retrieve what partition size needs to be used
-  # - pause:
-  #     prompt: "Please provide partition size in MB format"
-  #     echo: yes
-  #   register: result
-  # - set_fact:
-  #     size: "{{ result.user_input }}"
-  #   no_log: true
+  # retrieve what partition size needs to be used
+  - pause:
+      prompt: "Please provide partition size in MB format"
+      echo: yes
+    register: result
+  - set_fact:
+      size: "{{ result.user_input }}"
+    no_log: true
 
-  # # make sure the user provided an whole positive integer
-  # - name: Ensure that file size is a whole positive number
-  #   assert:
-  #     that:
-  #       - "{{ size }} | type_debug == 'int'"
-  #       - "{{ size }} is regex('^[0-9]+$')"
-  #   no_log: true
-  # - debug:
-  #     msg: "{{ size }}"
+  # make sure the user provided an whole positive integer
+  - name: Ensure that file size is a whole positive number
+    assert:
+      that:
+        - "{{ size }} | type_debug == 'int'"
+        - "{{ size }} is regex('^[0-9]+$')"
+    no_log: true
+  - debug:
+      msg: "{{ size }}"
 
-  # # Create a partition with the provided size
-  # - name: Create a new primary partition with provided size
-  #   parted:
-  #     device: /dev/xvdf
-  #     number: "{{ device_info.partitions | length + 1 }}"
-  #     state: present
-  #     part_start: "{% if device_info.partitions | length > 0 %}{{ device_info.partitions[-1].end + 1 }}MiB{% else %}0%{% endif %}"
-  #     part_end: "{% if device_info.partitions | length > 0 %}{{ device_info.partitions[-1].end + 1 + size | int }}MiB{% else %}{{ size | int }}MiB{% endif %}"
+  # Create a partition with the provided size
+  - name: Create a new primary partition with provided size
+    parted:
+      device: /dev/xvdf
+      number: "{{ device_info.partitions | length + 1 }}"
+      state: present
+      part_start: "{% if device_info.partitions | length > 0 %}{{ device_info.partitions[-1].end + 1 }}MiB{% else %}0%{% endif %}"
+      part_end: "{% if device_info.partitions | length > 0 %}{{ device_info.partitions[-1].end + 1 + size | int }}MiB{% else %}{{ size | int }}MiB{% endif %}"
 
-  # # Formats the new partition to XFS
-  # - name: format the new partition to xfs
-  #   filesystem:
-  #    fstype: xfs
-  #    dev: "/dev/xvdf{{ device_info.partitions | length + 1 }}"
+  # Formats the new partition
+  - name: format the new partition
+    filesystem:
+     fstype: "{% if device_info.partitions | length > 0 %} {{ device_info.partitions[-1].fstype }} {% else %} {{ filesystem }} {% endif %}"
+     dev: "/dev/xvdf{{ device_info.partitions | length + 1 }}"
 
-  # # Creates a mount directory for the new partition
-  # - name: Create a mount directory
-  #   file:
-  #     path: "/mt/xvdf{{ device_info.partitions | length + 1}}"
-  #     state: directory
-  #     mode: '0755'
+  # Creates a mount directory for the new partition
+  - name: Create a mount directory
+    file:
+      path: "/mt/xvdf{{ device_info.partitions | length + 1}}"
+      state: directory
+      mode: '0755'
 
-  # # Mounts the newly created partition
-  # - name: Mount new partition
-  #   mount:
-  #     fstype: xfs
-  #     src: "/dev/xvdf{{ device_info.partitions | length + 1 }}"
-  #     path: "/mt/xvdf{{ device_info.partitions | length + 1 }}"
-  #     state: mounted
+  # Mounts the newly created partition
+  - name: Mount new partition
+    mount:
+      fstype: "{% if device_info.partitions | length > 0 %} {{ device_info.partitions[-1].fstype }} {% else %} {{ filesystem }} {% endif %}"
+      src: "/dev/xvdf{{ device_info.partitions | length + 1 }}"
+      path: "/mt/xvdf{{ device_info.partitions | length + 1 }}"
+      state: mounted
 
-  # # These tasks ensure we have the default directories
-  # - name: Create /appl directory
-  #   file:
-  #     path: "/mt/xvdf{{ device_info.partitions | length + 1 }}/appl"
-  #     state: directory
-  #     mode: '0755'
+  # These tasks ensure we have the default directories
+  - name: Create /appl directory
+    file:
+      path: "/mt/xvdf{{ device_info.partitions | length + 1 }}/appl"
+      state: directory
+      mode: '0755'
 
-  # - name: Create /apps directory
-  #   file:
-  #     path: "/mt/xvdf{{ device_info.partitions | length + 1 }}/apps"
-  #     state: directory
-  #     mode: '0755'
+  - name: Create /apps directory
+    file:
+      path: "/mt/xvdf{{ device_info.partitions | length + 1 }}/apps"
+      state: directory
+      mode: '0755'
       
-  # - name: Create /data directory
-  #   file:
-  #     path: "/mt/xvdf{{ device_info.partitions | length + 1 }}/data"
-  #     state: directory
-  #     mode: '0755'
+  - name: Create /data directory
+    file:
+      path: "/mt/xvdf{{ device_info.partitions | length + 1 }}/data"
+      state: directory
+      mode: '0755'
