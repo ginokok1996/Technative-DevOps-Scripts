@@ -32,7 +32,7 @@
 
     # get and show available disk space
   - name: check if there is a label
-    shell: "parted {{ device }} unit MB print free 2>&1 | grep Error"
+    shell: "parted {{ device }} unit MB print free 2>&1 | grep Error | cat"
     register: labelError
   - debug:
       msg: "{{ labelError.stdout }}"
