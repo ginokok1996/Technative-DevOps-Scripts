@@ -30,6 +30,12 @@
   - debug:
       msg: "Using device: {{ device }}"
 
+  # Retrieve the device info so we can define the number, part_start & part_end for the partition
+  - name: Read device information of chosen device
+    parted: "device={{ device }} unit=MiB"
+    register: device_info
+    no_log: true
+
     # get and show available disk space
   - name: check if there is a label
     shell: "parted {{ device }} unit MB print free 2>&1 | grep Error | cat"
@@ -51,11 +57,17 @@
     shell: "parted {{ device }} mklabel {{ label }}"
     when: labelError.stdout != ""
 
-  # # Retrieve the device info so we can define the number, part_start & part_end for the partition
-  # - name: Read device information of chosen device
-  #   parted: "device={{ device }} unit=MiB"
-  #   register: device_info
-  #   no_log: true
+  # ask for filesystem if no partitions are present
+  - pause:
+      prompt: "No partitions found, please provide file system you wish to use (xfs, btrfs, ext(2,3,4), ext4dev, f2fs, lvm, ocfs2, reiserfs, vfat, swap, ufs)"
+      echo: yes
+      default: "xfs"
+    register: result
+    when: device_info.partitions | length == 0
+  - set_fact:
+      filesystem: "{{ result.user_input }}"
+    no_log: true
+    when: device_info.partitions | length == 0
 
   # # get and show available disk space
   # - name: get free space of chosen device
