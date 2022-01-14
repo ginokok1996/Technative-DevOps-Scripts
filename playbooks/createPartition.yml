@@ -41,11 +41,11 @@
       prompt: "No Disk label found, please provide disk label type you wish to use (bsd, loop, gpt, mac, msdos, pc98, sun)"
       echo: yes
     register: result
-    when: labelError != ""
+    when: labelError.stdout != ""
   - set_fact:
       label: "{{ result.user_input }}"
     no_log: true
-    when: labelError != ""
+    when: labelError.stdout != ""
     
 
   # # Retrieve the device info so we can define the number, part_start & part_end for the partition
