@@ -110,54 +110,51 @@
   - debug:
       msg: "{{ size }}"
 
-  - debug:
-      msg: "t{{ filesystem }}t"
+  # Create a partition with the provided size
+  - name: Create a new primary partition with provided size
+    parted:
+      device: "{{ device }}"
+      number: "{{ device_info.partitions | length + 1 }}"
+      state: present
+      part_start: "{% if device_info.partitions | length > 0 %}{{ device_info.partitions[-1].end + 1 }}MiB{% else %}0%{% endif %}"
+      part_end: "{% if device_info.partitions | length > 0 %}{{ device_info.partitions[-1].end + 1 + size | int }}MiB{% else %}{{ size | int }}MiB{% endif %}"
 
-  # # Create a partition with the provided size
-  # - name: Create a new primary partition with provided size
-  #   parted:
-  #     device: /dev/xvdf
-  #     number: "{{ device_info.partitions | length + 1 }}"
-  #     state: present
-  #     part_start: "{% if device_info.partitions | length > 0 %}{{ device_info.partitions[-1].end + 1 }}MiB{% else %}0%{% endif %}"
-  #     part_end: "{% if device_info.partitions | length > 0 %}{{ device_info.partitions[-1].end + 1 + size | int }}MiB{% else %}{{ size | int }}MiB{% endif %}"
+  # Formats the new partition
+  - name: format the new partition
+    filesystem:
+     fstype: "{% if device_info.partitions | length > 0 %}{{ device_info.partitions[-1].fstype }}{% else %}{{ filesystem }}{% endif %}"
+     dev: "{{ device }}{{ device_info.partitions | length + 1 }}"
 
-  # # Formats the new partition
-  # - name: format the new partition
-  #   filesystem:
-  #    fstype: "{% if device_info.partitions | length > 0 %} {{ device_info.partitions[-1].fstype }} {% else %} {{ filesystem }} {% endif %}"
-  #    dev: "/dev/xvdf{{ device_info.partitions | length + 1 }}"
+  # Creates a mount directory for the new partition
+  - name: Create a mount directory
+    file:
+      path: "/mt/{{ device }}{{ device_info.partitions | length + 1}}"
+      state: directory
+      mode: '0755'
 
-  # # Creates a mount directory for the new partition
-  # - name: Create a mount directory
-  #   file:
-  #     path: "/mt/xvdf{{ device_info.partitions | length + 1}}"
-  #     state: directory
-  #     mode: '0755'
+  # Mounts the newly created partition
+  - name: Mount new partition
+    mount:
+      fstype: "{% if device_info.partitions | length > 0 %}{{ device_info.partitions[-1].fstype }}{% else %}{{ filesystem }}{% endif %}"
+      src: "{{ device }}{{ device_info.partitions | length + 1 }}"
+      path: "/mt/{{ device }}{{ device_info.partitions | length + 1 }}"
+      state: mounted
 
-  # # Mounts the newly created partition
-  # - name: Mount new partition
-  #   mount:
-  #     fstype: "{% if device_info.partitions | length > 0 %}{{ device_info.partitions[-1].fstype }}{% else %}{{ filesystem }}{% endif %}"
-  #     src: "/dev/xvdf{{ device_info.partitions | length + 1 }}"
-  #     path: "/mt/xvdf{{ device_info.partitions | length + 1 }}"
-  #     state: mounted
+  # These tasks ensure we have the default directories
+  - name: Create /appl directory
+    file:
+      path: "/mt/{{ device }}{{ device_info.partitions | length + 1 }}/appl"
+      state: directory
+      mode: '0755'
 
-  # # These tasks ensure we have the default directories
-  # - name: Create /appl directory
-  #   file:
-  #     path: "/mt/xvdf{{ device_info.partitions | length + 1 }}/appl"
-  #     state: directory
-  #     mode: '0755'
-
-  # - name: Create /apps directory
-  #   file:
-  #     path: "/mt/xvdf{{ device_info.partitions | length + 1 }}/apps"
-  #     state: directory
-  #     mode: '0755'
+  - name: Create /apps directory
+    file:
+      path: "/mt/{{ device }}{{ device_info.partitions | length + 1 }}/apps"
+      state: directory
+      mode: '0755'
       
-  # - name: Create /data directory
-  #   file:
-  #     path: "/mt/xvdf{{ device_info.partitions | length + 1 }}/data"
-  #     state: directory
-  #     mode: '0755'
+  - name: Create /data directory
+    file:
+      path: "/mt/{{ device }}{{ device_info.partitions | length + 1 }}/data"
+      state: directory
+      mode: '0755'
