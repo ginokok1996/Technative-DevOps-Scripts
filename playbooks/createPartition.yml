@@ -32,9 +32,8 @@
 
     # get and show available disk space
   - name: check if there is a label
-    shell: "parted {{ device }} unit MB print free | grep 'unrecognized disk label'"
+    shell: "parted {{ device }} unit MB print free 2>&1 | grep Error"
     register: labelError
-    ignore_errors: yes
   - debug:
       msg: "{{ labelError.stdout }}"
     
