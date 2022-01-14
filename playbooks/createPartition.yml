@@ -85,7 +85,7 @@
     when: device_info.partitions | length == 0
 
   - debug:
-      msg: {{ device_info.partitions }}
+      msg: "{{ device_info.partitions }}"
     when: device_info.partitions | length > 0
   # # get and show available disk space
   # - name: get free space of chosen device
