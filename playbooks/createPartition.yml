@@ -47,18 +47,16 @@
       echo: yes
     register: result
     when: labelError.stdout != ""
+  - set_fact:
+      label: "{{ result.user_input }}"
+    no_log: true
+    when: labelError.stdout != ""
 
   # check if valid disk label is provided 
   - assert:
       that:
       - label|lower in [ 'bsd', 'loop', 'gpt', 'mac', 'msdos', 'pc98', 'sun' ]
       fail_msg: "Disk label should be one of: bsd, loop, gpt, mac, msdos, pc98, sun"
-    when: labelError.stdout != ""
-
-  # set variable if provided disk label is valid
-  - set_fact:
-      label: "{{ result.user_input }}"
-    no_log: true
     when: labelError.stdout != ""
 
   # create disk label if not present
@@ -72,18 +70,16 @@
       echo: yes
     register: result
     when: device_info.partitions | length == 0
+  - set_fact:
+      filesystem: "{{ result.user_input }}"
+    no_log: true
+    when: device_info.partitions | length == 0
 
-  # check if valid filesystem is provided
+  #check if valid filesystem is provided
   - assert:
       that:
       - filesystem|lower in [ 'xfs', 'btrfs', 'ext2', 'ext3', 'ext4', 'ext4dev', 'f2fs', 'lvm', 'ocfs2', 'reiserfs', 'vfat', 'swap', 'ufs' ]
       fail_msg: "Filesystem should be one of: xfs, btrfs, ext(2,3,4), ext4dev, f2fs, lvm. ocfs2, reiserfs, vfat, swap, ufs"
-    when: device_info.partitions | length == 0
-
-  # set variable if provided filesystem is valid
-  - set_fact:
-      filesystem: "{{ result.user_input }}"
-    no_log: true
     when: device_info.partitions | length == 0
   # # get and show available disk space
   # - name: get free space of chosen device
