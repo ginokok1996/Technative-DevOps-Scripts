@@ -1,5 +1,7 @@
 ---
-- name: Install Docker
+# This playbook makes sure the provided directory containts the following directores:
+# /data, /appl, /apps
+- name: apps, appl & data directories check
   hosts: all
   become: true
 
@@ -15,6 +17,7 @@
     debug:
       msg: "{{ directories.stdout.split('\n') }}"
 
+  # Retrieves what directory needs to be checked
   - pause:
       prompt: "What directory do you want to check?"
       echo: yes
@@ -24,12 +27,52 @@
       directory: "{{ result.user_input }}"
     no_log: true
 
+  # checks if provided directory exists
   - name: Check if provided directory exists
     stat:
       path: "{{ directory }}"
     register: mainDirectory
 
+  # throw error if directory doesn't exist
   - name: Throw error if provided directory doesn't exist
     fail:
       msg: "{{ directory }} doesn't exist"
     when: not mainDirectory.stat.exists
+
+  # check the default directories that need to be present
+  - name: Check if data directory exists
+    stat:
+      path: "{{ directory }}/data"
+    register: dataDirectory
+
+  - name: Check if apps directory exists
+    stat:
+      path: "{{ directory }}/apps"
+    register: appsDirectory
+
+  - name: Check if appl directory exists
+    stat:
+      path: "{{ directory }}/appl"
+    register: applDirectory
+
+  # create directories if not present
+  - name: Create data directory if it doesn't exist
+    file:
+      path: "{{ directory }}/appl"
+      state: directory
+      mode: '0755'
+    when: not dataDirectory.stat.exists
+
+  - name: Create apps directory if it doesn't exist
+    file:
+      path: "{{ directory }}/apps"
+      state: directory
+      mode: '0755'
+    when: not appsDirectory.stat.exists
+
+  - name: Create appl directory if it doesn't exist
+    file:
+      path: "{{ directory }}/appl"
+      state: directory
+      mode: '0755'
+    when: not applDirectory.stat.exists
