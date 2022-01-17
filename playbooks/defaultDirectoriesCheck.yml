@@ -13,13 +13,13 @@
   # Prints out the file systems
   - name: Display df list
     debug:
-      msg: "{{ disks.stdout.split('\n') }}"
+      msg: "{{ directories.stdout.split('\n') }}"
 
   - pause:
       prompt: "What directory do you want to check?"
       echo: yes
     register: result
-    
+
   - set_fact:
       directory: "{{ result.user_input }}"
     no_log: true
