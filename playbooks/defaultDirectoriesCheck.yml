@@ -55,10 +55,16 @@
       path: "{{ directory }}/appl"
     register: applDirectory
 
+  - debug:
+      msg: "{{ directory }}/appl"
+
+  - debug:
+      msg: "{{ dataDirectory.stat.exists }}"
+
   # create directories if not present
   - name: Create data directory if it doesn't exist
     file:
-      path: "{{ directory }}/appl"
+      path: "{{ directory }}/data"
       state: directory
       mode: '0755'
     when: not dataDirectory.stat.exists
