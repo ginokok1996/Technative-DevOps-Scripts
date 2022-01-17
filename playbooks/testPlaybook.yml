@@ -4,11 +4,12 @@
   become: true
 
   tasks:
-  # Retrieves disk list
+    # Retrieves disk list
   - name: get disk list
     shell: "parted -l"
     register: disks
     no_log: true
   # Prints out the available disks
-  - debug: var={{ disks }}
-    with_dict: os_web_node
+  - name: Display parted list
+    debug:
+      msg: "{{ disks.stdout.split('\n') }}"
