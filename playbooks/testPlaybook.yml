@@ -11,5 +11,5 @@
     no_log: true
   # Prints out the available disks
   - name: Display parted list
-    debug:
-      msg: "{{ disks.stdout.split('\n') }}"
+  - debug: var={{ disks }}
+    with_dict: os_web_node
