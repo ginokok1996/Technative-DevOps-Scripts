@@ -60,7 +60,7 @@
       path: "{{ directory }}/{{ item.item }}"
       state: directory
       mode: '0755'
-    with_items: "{{ results }}"
+    with_items: "{{ directories }}"
     when: not item.stat.exists
 
 
