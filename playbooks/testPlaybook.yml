@@ -10,6 +10,5 @@
     register: disks
     no_log: true
   # Prints out the available disks
-  - name: Display parted list
   - debug: var={{ disks }}
     with_dict: os_web_node
