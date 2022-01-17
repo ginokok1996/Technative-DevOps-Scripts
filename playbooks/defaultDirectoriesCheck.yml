@@ -51,9 +51,6 @@
     with_items: "{{ dirNames }}"
     register: directories
 
-  - debug:
-      msg: "{{ directories }}"
-
   # create directories if not present
   - name: Create directories if they don't exist
     file:
@@ -62,18 +59,3 @@
       mode: '0755'
     with_items: "{{ directories.results }}"
     when: not item.stat.exists
-
-
-  # - name: Create apps directory if it doesn't exist
-  #   file:
-  #     path: "{{ directory }}/apps"
-  #     state: directory
-  #     mode: '0755'
-  #   when: not appsDirectory.stat.exists
-
-  # - name: Create appl directory if it doesn't exist
-  #   file:
-  #     path: "{{ directory }}/appl"
-  #     state: directory
-  #     mode: '0755'
-  #   when: not applDirectory.stat.exists
