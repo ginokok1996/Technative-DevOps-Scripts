@@ -4,6 +4,8 @@
 - name: apps, appl & data directories check
   hosts: all
   become: true
+  vars:
+    dirNames: ["data", "appl", "apps"]
 
   tasks:
     # Retrieves file systems
@@ -42,37 +44,32 @@
   # check the default directories that need to be present
   - name: Check if data directory exists
     stat:
-      path: "{{ directory }}/data"
-    register: dataDirectory
+      path: "{{ directory }}/{{ item }}"
+    with_items: "{{ dirNames }}"
+    register: results
 
-  - name: Check if apps directory exists
-    stat:
-      path: "{{ directory }}/apps"
-    register: appsDirectory
+  - debug:
+      msg: "{{ results }}"
 
-  - name: Check if appl directory exists
-    stat:
-      path: "{{ directory }}/appl"
-    register: applDirectory
-    
-  # create directories if not present
-  - name: Create data directory if it doesn't exist
-    file:
-      path: "{{ directory }}/data"
-      state: directory
-      mode: '0755'
-    when: not dataDirectory.stat.exists
 
-  - name: Create apps directory if it doesn't exist
-    file:
-      path: "{{ directory }}/apps"
-      state: directory
-      mode: '0755'
-    when: not appsDirectory.stat.exists
+  # # create directories if not present
+  # - name: Create data directory if it doesn't exist
+  #   file:
+  #     path: "{{ directory }}/data"
+  #     state: directory
+  #     mode: '0755'
+  #   when: not dataDirectory.stat.exists
 
-  - name: Create appl directory if it doesn't exist
-    file:
-      path: "{{ directory }}/appl"
-      state: directory
-      mode: '0755'
-    when: not applDirectory.stat.exists
+  # - name: Create apps directory if it doesn't exist
+  #   file:
+  #     path: "{{ directory }}/apps"
+  #     state: directory
+  #     mode: '0755'
+  #   when: not appsDirectory.stat.exists
+
+  # - name: Create appl directory if it doesn't exist
+  #   file:
+  #     path: "{{ directory }}/appl"
+  #     state: directory
+  #     mode: '0755'
+  #   when: not applDirectory.stat.exists
