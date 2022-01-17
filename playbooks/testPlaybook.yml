@@ -4,9 +4,12 @@
   become: true
 
   tasks:
-  # Make sure we have the latest yum utils version
-  - name: Install yum utils
-    yum:
-      name: 
-        - yum-utils
-      state: latest
+  # Retrieves disk list
+  - name: get disk list
+    shell: "parted -l"
+    register: disks
+    no_log: true
+  # Prints out the available disks
+  - name: Display parted list
+    debug:
+      msg: "{{ disks.stdout.split('\n') }}"
