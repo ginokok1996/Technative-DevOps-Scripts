@@ -45,7 +45,7 @@
       msg: "{{ dirNames }}"
 
   # check the default directories that need to be present
-  - name: Check if data directory exists
+  - name: Check if the directories exist
     stat:
       path: "{{ directory }}/{{ item }}"
     with_items: "{{ dirNames }}"
