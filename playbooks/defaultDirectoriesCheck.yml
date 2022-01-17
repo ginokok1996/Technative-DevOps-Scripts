@@ -1,0 +1,14 @@
+---
+- name: Install Docker
+  hosts: all
+  become: true
+
+  vars_prompt:
+  - name: directory
+    prompt: What directory do you want to check?
+    private: no
+
+  tasks:
+  - name: Display parted list
+    debug:
+      msg: "Directory to check: {{directory}}"
