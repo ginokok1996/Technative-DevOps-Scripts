@@ -41,6 +41,9 @@
       msg: "{{ directory }} doesn't exist"
     when: not mainDirectory.stat.exists
 
+  - debug:
+      msg: "{{ dirNames }}"
+
   # check the default directories that need to be present
   - name: Check if data directory exists
     stat:
