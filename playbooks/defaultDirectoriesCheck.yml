@@ -17,7 +17,7 @@
   # Prints out the file systems
   - name: Display df list
     debug:
-      msg: "{{ directories.stdout.split('\n') }}"
+      msg: "{{ directories.stdout }}"
 
   # Retrieves what directory needs to be checked
   - pause:
