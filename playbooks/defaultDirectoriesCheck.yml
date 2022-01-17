@@ -9,6 +9,12 @@
     private: no
 
   tasks:
-  - name: Display parted list
-    debug:
-      msg: "Directory to check: {{directory}}"
+  - name: Check if provided directory exists
+    stat:
+      path: "{{ directory }}"
+    register: mainDirectory
+
+  - name: Throw error if provided directory doesn't exist
+    fail:
+      msg: "{{ directory }} doesn't exist"
+    when: not mainDirectory.stat.exists
