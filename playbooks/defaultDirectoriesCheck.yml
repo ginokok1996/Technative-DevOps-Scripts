@@ -46,20 +46,20 @@
     stat:
       path: "{{ directory }}/{{ item }}"
     with_items: "{{ dirNames }}"
-    register: results
+    register: directories
 
   - debug:
-      msg: "{{ results }}"
+      msg: "{{ directories }}"
 
 
-  # create directories if not present
-  - name: Create directories if they don't exist
-    file:
-      path: "{{ directory }}/{{ item.item }}"
-      state: directory
-      mode: '0755'
-    with_items: "{{ results }}"
-    when: not item.stat.exists
+  # # create directories if not present
+  # - name: Create directories if they don't exist
+  #   file:
+  #     path: "{{ directory }}/{{ item.item }}"
+  #     state: directory
+  #     mode: '0755'
+  #   with_items: "{{ results }}"
+  #   when: not item.stat.exists
 
 
   # - name: Create apps directory if it doesn't exist
