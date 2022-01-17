@@ -58,8 +58,9 @@
       path: "{{ directory }}/{{ item.item }}"
       state: directory
       mode: '0755'
-    when: not item.stat.exists
     with_items: "{{ results }}"
+    when: not item.stat.exists
+
 
   # - name: Create apps directory if it doesn't exist
   #   file:
