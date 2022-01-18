@@ -13,7 +13,7 @@
   # Prints out the available disks
   - name: Display parted list
     debug:
-      msg: "{{ disks.stdout }}"
+      msg: "{{ disks.stdout.split('\n') }}"
 
   # retrieve what disk needs to be used
   - pause:
