@@ -38,13 +38,13 @@ cd /tmp/playbook;
 # Clones the respository to the created tmp folder and navigates to repo
 git clone $destination;
 
+cd $NAME;
+
 #check if we need to switch branch
 if [ ! -z "$branch" ]
 then
-    git checkout $branch || exit 1
+    git checkout $branch || exit 1;
 fi
-
-cd $NAME;
 
 # Checks if we can find the file and if so run ansible-playbook with it
 if test -f "$fileName"; then
