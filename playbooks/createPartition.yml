@@ -125,36 +125,34 @@
      fstype: "{% if device_info.partitions | length > 0 %}{{ device_info.partitions[-1].fstype }}{% else %}{{ filesystem }}{% endif %}"
      dev: "{{ device }}{{ device_info.partitions | length + 1 }}"
 
-  # Creates a mount directory for the new partition
-  - name: Create a mount directory
-    file:
-      path: "/mt/{{ device }}{{ device_info.partitions | length + 1}}"
-      state: directory
-      mode: '0755'
+  - name: mount partition block
+    block:
+      # retrieve what partition size needs to be used
+      - pause:
+          prompt: "Please provide the directory path you want to mount this partition on (E.g: /mount/xvda)"
+          echo: yes
+        register: result
+      - set_fact:
+          directory: "{{ result.user_input }}"
+        no_log: true
 
-  # Mounts the newly created partition
-  - name: Mount new partition
-    mount:
-      fstype: "{% if device_info.partitions | length > 0 %}{{ device_info.partitions[-1].fstype }}{% else %}{{ filesystem }}{% endif %}"
-      src: "{{ device }}{{ device_info.partitions | length + 1 }}"
-      path: "/mt/{{ device }}{{ device_info.partitions | length + 1 }}"
-      state: mounted
+      # Creates a mount directory for the new partition
+      - name: Create a mount directory
+        file:
+          path: "{{ directory }}"
+          state: directory
+          mode: '0755'
 
-  # These tasks ensure we have the default directories
-  - name: Create /appl directory
-    file:
-      path: "/mt/{{ device }}{{ device_info.partitions | length + 1 }}/appl"
-      state: directory
-      mode: '0755'
-
-  - name: Create /apps directory
-    file:
-      path: "/mt/{{ device }}{{ device_info.partitions | length + 1 }}/apps"
-      state: directory
-      mode: '0755'
-      
-  - name: Create /data directory
-    file:
-      path: "/mt/{{ device }}{{ device_info.partitions | length + 1 }}/data"
-      state: directory
-      mode: '0755'
+      # Mounts the newly created partition
+      - name: Mount new partition
+        mount:
+          fstype: "{% if device_info.partitions | length > 0 %}{{ device_info.partitions[-1].fstype }}{% else %}{{ filesystem }}{% endif %}"
+          src: "{{ device }}{{ device_info.partitions | length + 1 }}"
+          path: "{{ directory }}"
+          state: mounted
+    rescue:
+      - name: Remove partition if mounting failed
+        parted:
+          device: "{{ device }}"
+          number: "{{ device_info.partitions | length + 1 }}"
+          state: absent

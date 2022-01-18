@@ -22,9 +22,3 @@
   - set_fact:
       device: "{{ result.user_input }}"
     no_log: true
-
-  # test with ls to see if disk exists
-  - name: Check if disk exists
-    shell: "ls {{ device }}"
-  - debug:
-      msg: "Using device: {{ device| replace('dev/', '') }}"
