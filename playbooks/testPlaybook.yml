@@ -4,13 +4,13 @@
   become: true
 
   tasks:
-  # Retrieves disk list
-  - name: get disk list
+  # Retrieves mount list
+  - name: get mounted list
     shell: "df -hT"
     register: mountedList
     no_log: true
 
-  # Prints out the available disks
-  - name: Display parted list
+  # Prints out the currently mounted directories
+  - name: Display mounted list
     debug:
       msg: "{{ mountedList.stdout.split('\n') }}"
