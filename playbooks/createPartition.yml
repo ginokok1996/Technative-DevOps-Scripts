@@ -127,7 +127,7 @@
 
   - name: mount partition block
     block:
-  # Retrieves mount list
+      # Retrieves mount list
       - name: get mounted list
         shell: "df -hT"
         register: mountedList
