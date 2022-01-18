@@ -14,4 +14,4 @@
 
     - command: "mountpoint {{ directory }}"
       register: mpoint
-      failed_when: '"is a mountpoint" in mpoint.stdout or not "is not a mountpoint" in mpoint.stdout'
+      failed_when: '"is a mountpoint" in mpoint.stdout'

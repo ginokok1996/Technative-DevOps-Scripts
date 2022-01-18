@@ -136,9 +136,9 @@
           directory: "{{ result.user_input }}"
         no_log: true
 
-      - command: "mountpoint -q {{ directory }}"
+      - command: "mountpoint {{ directory }}"
         register: mpoint
-        failed_when: mpoint == directory is a mountpoint
+        failed_when: '"is a mountpoint" in mpoint.stdout'
 
       # Creates a mount directory for the new partition
       - name: Create a mount directory
