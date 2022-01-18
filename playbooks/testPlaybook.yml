@@ -4,21 +4,14 @@
   become: true
 
   tasks:
-  - name: get disk list
-    shell: "parted -l"
-    register: disks
-    no_log: true
+    - pause:
+        prompt: "Please provide the directory path you want to mount this partition on (E.g: /mount/xvda)"
+        echo: yes
+      register: result
+    - set_fact:
+        directory: "{{ result.user_input }}"
+      no_log: true
 
-  # Prints out the available disks
-  - name: Display parted list
-    debug:
-      msg: "{{ disks.stdout.split('\n') }}"
-
-  # retrieve what disk needs to be used
-  - pause:
-      prompt: "Please enter the disk name you wish to use"
-      echo: yes
-    register: result
-  - set_fact:
-      device: "{{ result.user_input }}"
-    no_log: true
+    - command: "mountpoint -q {{ directory }}"
+      register: mpoint
+      failed_when: mpoint == directory is a mountpoint
