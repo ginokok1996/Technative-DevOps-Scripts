@@ -12,7 +12,7 @@
         directory: "{{ result.user_input }}"
       no_log: true
 
-    - command: "mountpoint -q {{ directory }}"
+    - command: "mountpoint -q {{ directory }} | cat"
       register: mpoint
     
     - debug:
