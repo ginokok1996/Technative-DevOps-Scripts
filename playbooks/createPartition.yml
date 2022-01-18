@@ -136,6 +136,10 @@
           directory: "{{ result.user_input }}"
         no_log: true
 
+      - command: "mountpoint -q {{ directory }}"
+        register: volume_stat
+        failed_when: True
+
       # Creates a mount directory for the new partition
       - name: Create a mount directory
         file:
