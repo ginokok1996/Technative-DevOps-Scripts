@@ -1,11 +1,12 @@
 #!/bin/bash
 
 # Define flags
-while getopts d:f: flag
+while getopts d:f:b: flag
 do
     case "${flag}" in
         d) destination=${OPTARG};;
         f) fileName=${OPTARG};;
+        b) branch=${OPTARG};;
     esac
 done
 
@@ -23,6 +24,7 @@ then
       filename="main.yml";
 fi
 
+
 # Retrieve the repository name
 NAME=${destination##*/};
 
@@ -35,6 +37,13 @@ cd /tmp/playbook;
 
 # Clones the respository to the created tmp folder and navigates to repo
 git clone $destination;
+
+#check if we need to switch branch
+if [ ! -z "$branch" ]
+then
+    git checkout $branch || exit 1
+fi
+
 cd $NAME;
 
 # Checks if we can find the file and if so run ansible-playbook with it
