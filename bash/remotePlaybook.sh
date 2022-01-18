@@ -20,7 +20,7 @@ fi
 # Default to playbook.yml is fileName flag is empty
 if [ -z "$fileName" ]
 then
-      echo "fileName flag is empty defaulting to playbook.yml";
+      echo "fileName flag is empty defaulting to main.yml";
       filename="main.yml";
 fi
 
