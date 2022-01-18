@@ -4,14 +4,13 @@
   become: true
 
   tasks:
-    - pause:
-        prompt: "Please provide the directory path you want to mount this partition on (E.g: /mount/xvda)"
-        echo: yes
-      register: result
-    - set_fact:
-        directory: "{{ result.user_input }}"
-      no_log: true
+  # Retrieves disk list
+  - name: get disk list
+    shell: "df -hT"
+    register: mountedList
+    no_log: true
 
-    - command: "mountpoint {{ directory }}"
-      register: mpoint
-      failed_when: '"is a mountpoint" in mpoint.stdout'
+  # Prints out the available disks
+  - name: Display parted list
+    debug:
+      msg: "{{ mountedList.stdout.split('\n') }}"
