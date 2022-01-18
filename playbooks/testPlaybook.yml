@@ -14,4 +14,6 @@
 
     - command: "mountpoint -q {{ directory }}"
       register: mpoint
-      failed_when: mpoint == directory is a mountpoint
+    
+    - debug:
+        msg: "{{mpoint.stdout}}"
