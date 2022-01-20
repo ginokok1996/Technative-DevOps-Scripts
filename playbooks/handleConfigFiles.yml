@@ -2,11 +2,22 @@
 - name: Handle config files
   hosts: all
   become: true
+  vars:
+    clone_location: "/tmp/magento"
+    repository: "https://github.com/ginokok1996/Technative-DevOps-Scripts.git"
+    version: "master"
 
   tasks:
-      # Make sure we have git installed
-  - name: Install git
-    yum:
-      name: 
-        - git
-      state: latest
+    # Make sure we have git installed
+    - name: Install git
+      yum:
+        name: 
+          - git
+        state: latest
+    
+    # clone the repository
+    - name: Git checkout
+      git:
+        repo: "{{ repository }}"
+        dest: "{{ clone_location }}"
+        version: "{{ version }}"
