@@ -1,0 +1,12 @@
+---
+- name: Handle config files
+  hosts: all
+  become: true
+
+  tasks:
+      # Make sure we have git installed
+  - name: Install git
+    yum:
+      name: 
+        - git
+      state: latest
