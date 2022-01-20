@@ -6,6 +6,8 @@
     clone_location: "/tmp/magento"
     repository: "https://github.com/ginokok1996/Technative-DevOps-Scripts.git"
     version: "master"
+    mount_location: "/tmp/test"
+    directories: ['appl', 'apps', 'data', 'config']
 
   tasks:
     # Make sure we have git installed
@@ -22,6 +24,14 @@
         dest: "{{ clone_location }}"
         version: "{{ version }}"
 
+    # make sure we have the desired directories in the mount location
+    - name: Make sure we have desired directories
+      file:
+        path: "{{ mount_location }}/{{ item }}"
+        state: directory
+        mode: "0755"
+        with_items: directories
+        
     # remove the cloned repository
     - name: Removing the repository
       file:
