@@ -35,10 +35,11 @@
     # copy the config files to the machine
     - name: Copy the config files to the machine
       block:
-        - copy:
-          src: "{{ clone_location }}/config"
-          dest: "{{ mount_location }}/config"
-          remote_src: yes
+        - name: copy the config files
+          copy:
+            src: "{{ clone_location }}/config"
+            dest: "{{ mount_location }}/config"
+            remote_src: yes
       rescue:
         - name: Removing the repository
           file:
