@@ -22,7 +22,7 @@
         hostname: "db.magento2.docker"
         volumes:
           - /tmp/data/db:/var/lib/mysql
-          - /tmp/appl/config/mysql/conf:/etc/mysql/conf.d
+          - /tmp/appl/config/mysql/config:/etc/mysql/conf.d
         networks:
           - name: magento
             aliases:
