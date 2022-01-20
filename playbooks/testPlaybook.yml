@@ -1,16 +1,29 @@
 ---
-- name: Install Docker
+- name: Testing playbook
   hosts: all
   become: true
 
   tasks:
-  # Retrieves mount list
-  - name: get mounted list
-    shell: "df -hT"
-    register: mountedList
-    no_log: true
+    - name: Create a network
+      docker_network:
+        name: magento
 
-  # Prints out the currently mounted directories
-  - name: Display mounted list
-    debug:
-      msg: "{{ mountedList.stdout.split('\n') }}"
+    - name: Create a mariaDB container
+      docker_container:
+        name: db
+        image: 'mariadb:10.7'
+        ports: 
+          - '3306'
+        env:
+          MYSQL_ROOT_PASSWORD: "magento2"
+          MYSQL_DATABASE: "magento2"
+          MYSQL_USER: "magento2"
+          MYSQL_PASSWORD: "magento2"
+        hostname: "db.magento2.docker"
+        volumes:
+          - /tmp/data/db:/var/lib/mysql
+          - /tmp/appl/config/mysql/conf:/etc/mysql/conf.d
+        networks:
+          - name: magento
+            aliases:
+              - "db.magento2.docker"
