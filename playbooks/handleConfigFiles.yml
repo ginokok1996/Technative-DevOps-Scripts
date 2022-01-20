@@ -16,8 +16,14 @@
         state: latest
     
     # clone the repository
-    - name: Git checkout
+    - name: Cloning the repository
       git:
         repo: "{{ repository }}"
         dest: "{{ clone_location }}"
         version: "{{ version }}"
+
+    # remove the cloned repository
+    - name: Removing the repository
+      file:
+        path: "{{ clone_location }}"
+        state: absent
