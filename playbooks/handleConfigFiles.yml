@@ -34,9 +34,16 @@
 
     # copy the config files to the machine
     - name: Copy the config files to the machine
-      copy:
-        src: "{{ clone_location }}/config"
-        dest: "{{ mount_location }}/config"
+      block:
+        copy:
+          src: "{{ clone_location }}/config"
+          dest: "{{ mount_location }}/config"
+          remote_src: yes
+      rescue:
+        - name: Removing the repository
+          file:
+            path: "{{ clone_location }}"
+            state: absent
 
     # remove the cloned repository
     - name: Removing the repository
