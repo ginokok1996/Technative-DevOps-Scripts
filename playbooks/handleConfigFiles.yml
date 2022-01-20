@@ -32,6 +32,12 @@
         mode: "0755"  
       with_items: "{{ dirNames }}"
 
+    # copy the config files to the machine
+    - name: Copy the config files to the machine
+      copy:
+        src: "{{ clone_location }}/config"
+        dest: "{{ mount_location }}/config"
+
     # remove the cloned repository
     - name: Removing the repository
       file:
