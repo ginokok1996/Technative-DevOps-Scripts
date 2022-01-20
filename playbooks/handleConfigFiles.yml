@@ -38,7 +38,7 @@
         - name: copy the config files
           copy:
             src: "{{ clone_location }}/config"
-            dest: "{{ mount_location }}/config"
+            dest: "{{ mount_location }}"
             remote_src: yes
       rescue:
         - name: Removing the repository
