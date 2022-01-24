@@ -12,7 +12,29 @@
     - rpm_key:
         state: present
         key: https://rpms.remirepo.net/RPM-GPG-KEY-remi2018
+
     - name: Installing Remi Repository
       yum:
         name: https://rpms.remirepo.net/enterprise/remi-release-8.rpm
         state: present
+
+    - name: Installing php
+      yum:
+        enablerepo: "remi,remi-php74"
+        name:
+        - php
+        - php-common
+        - php-cli
+        - php-intl
+        - php-pdo_mysql
+        - php-openssl
+        - php-soap
+        - php-sockets
+        - php-sodium
+        - php-xsl
+        - php-gd
+        - php-curl
+        - php-mysqlnd
+        - php-fpm
+        - php-mysqli
+        state: latest
