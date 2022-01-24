@@ -45,6 +45,7 @@
         - php-fpm
         - php-mysqli
         - php-json
+        - php-zip
         state: latest
 
     - name: Validate Composer checksum
