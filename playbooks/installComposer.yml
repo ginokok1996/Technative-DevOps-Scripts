@@ -9,9 +9,6 @@
         name: epel-release
         state: present
     - name: Installing Remi Repository
-      yum_repository:
-        description: repo for docker
-        name: remi
-        baseurl: https://rpms.remirepo.net/enterprise/remi-release-8.rpm
-        gpgkey: https://rpms.remirepo.net/RPM-GPG-KEY-remi2018
-        gpgcheck: yes
+      yum:
+        name: https://rpms.remirepo.net/enterprise/remi-release-8.rpm
+        state: present
