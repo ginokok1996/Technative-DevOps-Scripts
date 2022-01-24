@@ -8,6 +8,10 @@
       yum:
         name: epel-release
         state: present
+
+    - rpm_key:
+        state: present
+        key: https://rpms.remirepo.net/RPM-GPG-KEY-remi2018
     - name: Installing Remi Repository
       yum:
         name: https://rpms.remirepo.net/enterprise/remi-release-8.rpm
