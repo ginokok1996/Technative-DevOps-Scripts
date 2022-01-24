@@ -36,6 +36,7 @@
         - php-mysqlnd
         - php-fpm
         - php-mysqli
+        - php-json
         state: latest
 
     - name: Validate Composer checksum
