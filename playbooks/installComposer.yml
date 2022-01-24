@@ -63,7 +63,7 @@
 
     # adds magento repo authentication to auth.json
     - name: Add magento repo authentication
-      shell: "composer global config"
+      shell: "composer global config | cat"
 
     # adds magento repo authentication to auth.json
     - name: Add magento repo authentication
