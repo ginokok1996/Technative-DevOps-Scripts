@@ -49,12 +49,12 @@
       shell: curl -sS https://getcomposer.org/installer | php
       args:
         chdir: /usr/src/
-        creates: /usr/local/bin/composer
+        creates: /usr/bin/composer
         warn: false
 
     - name: Add Composer to global path
       copy: 
-        dest: /usr/local/bin/composer
+        dest: /usr/bin/composer
         group: centos
         mode: '0755'
         owner: centos
