@@ -18,6 +18,14 @@
         name: https://rpms.remirepo.net/enterprise/remi-release-7.rpm
         state: present
 
+    # resets yum php module
+    - name: Reset yum php module
+      shell: "yum module reset php -y"
+
+    # enable php 7.4 remi module
+    - name: Enable remi-7.4 module
+      shell: "yum module enable php:remi-7.4 -y"
+
     - name: Installing php
       yum:
         enablerepo: "remi,remi-php74"
