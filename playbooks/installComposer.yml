@@ -12,7 +12,6 @@
       yum_repository:
         description: repo for docker
         name: docker-ce
-        baseUrl: https://rpms.remirepo.net/enterprise/remi-release-8.rpm
+        baseurl: https://rpms.remirepo.net/enterprise/remi-release-8.rpm
         gpgkey: https://rpms.remirepo.net/RPM-GPG-KEY-remi2018
         gpgcheck: yes
-        state: present
