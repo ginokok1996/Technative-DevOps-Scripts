@@ -68,4 +68,3 @@
     # adds magento repo authentication to auth.json
     - name: Add magento repo authentication
       shell: "composer create-project --repository-url https://repo.magento.com/ magento/project-community-edition /tmp/testing/"
-"
