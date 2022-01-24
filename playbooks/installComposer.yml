@@ -30,7 +30,6 @@
         - php-openssl
         - php-soap
         - php-sockets
-        - php-sodium
         - php-xsl
         - php-gd
         - php-curl
