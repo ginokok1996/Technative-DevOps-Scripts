@@ -64,3 +64,7 @@
     # adds magento repo authentication to auth.json
     - name: Add magento repo authentication
       shell: "composer config --global http-basic.example.o usere passwo | cat"
+      register: test
+
+    - debug:
+        msg: "{{test.stdout}}"
