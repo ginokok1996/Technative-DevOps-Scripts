@@ -2,6 +2,7 @@
 - name: Install composer
   hosts: all
   become: true
+  become_user: centos
 
   tasks:
     - name: Installing epel-release
