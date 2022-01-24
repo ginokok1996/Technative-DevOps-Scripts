@@ -1,0 +1,10 @@
+---
+- name: Install composer
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Installing Remi Repository
+      yum:
+        name: https://rpms.remirepo.net/enterprise/remi-release-8.rpm
+        state: present
