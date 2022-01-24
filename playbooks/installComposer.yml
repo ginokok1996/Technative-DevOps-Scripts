@@ -11,11 +11,11 @@
 
     - rpm_key:
         state: present
-        key: https://rpms.remirepo.net/RPM-GPG-KEY-remi2018
+        key: https://rpms.remirepo.net/RPM-GPG-KEY-remi
 
     - name: Installing Remi Repository
       yum:
-        name: https://rpms.remirepo.net/enterprise/remi-release-8.rpm
+        name: https://rpms.remirepo.net/enterprise/remi-release-7.rpm
         state: present
 
     - name: Installing php
@@ -65,6 +65,6 @@
     - name: Add magento repo authentication
       shell: "composer config --global http-basic.repo.magento.com ce7e9740272307af36caad68f054f144 d4975ceefe2051768b2e01b9796f53a0"
 
-    # adds magento repo authentication to auth.json
-    - name: Add magento repo authentication
-      shell: "composer create-project --repository-url https://repo.magento.com/ magento/project-community-edition /tmp/testing/"
+    # # adds magento repo authentication to auth.json
+    # - name: Add magento repo authentication
+    #   shell: "composer create-project --repository-url https://repo.magento.com/ magento/project-community-edition /tmp/testing/"
