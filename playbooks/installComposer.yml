@@ -2,7 +2,6 @@
 - name: Install composer
   hosts: all
   become: true
-  become_user: centos
 
   tasks:
     - name: Installing epel-release
@@ -66,6 +65,7 @@
     - name: Add magento repo authentication
       shell: "composer"
       register: test
+      become_user: centos
 
     # # adds magento repo authentication to auth.json
     # - name: Add magento repo authentication
