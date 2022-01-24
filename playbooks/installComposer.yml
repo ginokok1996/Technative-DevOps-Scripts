@@ -21,6 +21,7 @@
     # resets yum php module
     - name: Reset yum php module
       shell: "yum module reset php -y"
+      warn: false
 
     # enable php 7.4 remi module
     - name: Enable remi-7.4 module
