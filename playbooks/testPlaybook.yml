@@ -8,16 +8,15 @@
       docker_network:
         name: magento
 
-    - name: Create a mailhog container
+    - name: Create a tls container
       docker_container:
         restart_policy: 'always'
-        name: mail
-        image: 'mailhog/mailhog:v1.0.1'
+        name: tls
+        image: 'magento/magento-cloud-docker-nginx:1.9-1.2'
         ports: 
-          - '1025:1025'
-          - '8025:8025'
-        hostname: "mail.magento2.docker"
+          - '433:433'
+        hostname: "tls.magento2.docker"
         networks:
           - name: magento
             aliases:
-              - "mail.magento2.docker"
+              - "tls.magento2.docker"
