@@ -27,3 +27,22 @@
           - name: magento
             aliases:
               - "db.magento2.docker"
+
+    - name: Create a Phpmyadmin container
+      docker_container:
+        name: phpmyadmin
+        image: 'phpmyadmin/phpmyadmin'
+        ports: 
+          - '8000:80'
+        env:
+          MYSQL_ROOT_PASSWORD: "magento2"
+          MYSQL_USER: "magento2"
+          MYSQL_PASSWORD: "magento2"
+        hostname: "phpmyadmin.magento2.docker"
+        restart_policy: "always"
+        links:
+          - 'db:db'
+        networks:
+          - name: magento
+            aliases:
+              - "phpmyadmin.magento2.docker"
