@@ -8,41 +8,16 @@
       docker_network:
         name: magento
 
-    - name: Create a mariaDB container
+    - name: Create a mailhog container
       docker_container:
-        name: db
-        image: 'mariadb:10.7'
+        restart_policy: 'always'
+        name: mail
+        image: 'mailhog/mailhog:latest'
         ports: 
-          - '3306'
-        env:
-          MYSQL_ROOT_PASSWORD: "magento2"
-          MYSQL_DATABASE: "magento2"
-          MYSQL_USER: "magento2"
-          MYSQL_PASSWORD: "magento2"
-        hostname: "db.magento2.docker"
-        volumes:
-          - /tmp/data/db:/var/lib/mysql
-          - /tmp/appl/config/mysql/config:/etc/mysql/conf.d
+          - '1025:1025'
+          - '8025:8025'
+        hostname: "mail.magento2.docker"
         networks:
           - name: magento
             aliases:
-              - "db.magento2.docker"
-
-    - name: Create a Phpmyadmin container
-      docker_container:
-        name: phpmyadmin
-        image: 'phpmyadmin/phpmyadmin'
-        ports: 
-          - '8000:80'
-        env:
-          MYSQL_ROOT_PASSWORD: "magento2"
-          MYSQL_USER: "magento2"
-          MYSQL_PASSWORD: "magento2"
-        hostname: "phpmyadmin.magento2.docker"
-        restart_policy: "always"
-        links:
-          - 'db:db'
-        networks:
-          - name: magento
-            aliases:
-              - "phpmyadmin.magento2.docker"
+              - "mail.magento2.docker"
