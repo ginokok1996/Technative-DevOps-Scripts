@@ -8,15 +8,19 @@
       docker_network:
         name: magento
 
-    - name: Create a tls container
+    - name: Create a elastic search
       docker_container:
         restart_policy: 'always'
-        name: tls
-        image: 'magento/magento-cloud-docker-nginx:1.9-1.2'
+        name: elasticsearch
+        image: 'magento/magento-cloud-docker-elasticsearch:7.7-1.3.0'
+        volumes:
+          - './.docker/elasticsearch/data:/usr/share/elasticsearch/data:rw,delegated'
+          - './.docker/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:rw,delegated'
         ports: 
-          - '433:433'
-        hostname: "tls.magento2.docker"
+          - '9200:9200'
+          - '9300:9300'
+        hostname: "elasticsearch.magento2.docker"
         networks:
           - name: magento
             aliases:
-              - "tls.magento2.docker"
+              - "elasticsearch.magento2.docker"
