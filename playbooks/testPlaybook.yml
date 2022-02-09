@@ -23,8 +23,8 @@
           MYSQL_PASSWORD: "magento2"
         hostname: "db.magento2.docker"
         volumes:
-          - "{{ root_directory }}/data/db:/var/lib/mysql"
-          - "{{ root_directory }}/config/mysql/conf.d:/etc/mysql/conf.d"
+          - "/mount/main/data/db:/var/lib/mysql"
+          - "/mount/main/config/mysql/conf.d:/etc/mysql/conf.d"
         networks:
           - name: magento
             aliases:
