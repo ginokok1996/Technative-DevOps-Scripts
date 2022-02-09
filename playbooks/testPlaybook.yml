@@ -13,9 +13,9 @@
     - name: Create a mariaDB container
       docker_container:
         name: db
-        image: 'mariadb:10.3'
+        image: 'mariadb:10.4'
         ports: 
-          - '3306'
+          - '3306:3306'
         env:
           MYSQL_ROOT_PASSWORD: "magento2"
           MYSQL_DATABASE: "magento2"
