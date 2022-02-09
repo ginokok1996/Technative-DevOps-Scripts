@@ -4,48 +4,28 @@
   become: true
 
   tasks:
-  # Make sure we have the required packages
-  - name: Install required packages
-    yum:
-      name: 
-        - yum-utils
-        - python3
-        - python3-pip
-      state: latest
+    # create the magento network
+    - name: Create magento network network
+      docker_network:
+        name: magento
 
-  # Adds the docker-ce repository to the machine
-  - name: creating a docker repository
-    yum_repository:
-      description: repo for docker
-      name: docker-ce
-      baseurl: https://download.docker.com/linux/centos/8/x86_64/stable/
-      gpgkey: https://download.docker.com/linux/centos/gpg
-      gpgcheck: yes
-
-  # Installs docker on the machine
-  - name: install docker-ce
-    yum:
-      name:
-        - docker-ce
-        - docker-ce-cli
-        - containerd.io
-      state: present
-  # Retrieves the docker version
-  - name: get docker version
-    shell: "docker -v"
-    register: version
-
-  # Prints out the installed docker version
-  - debug: var=version.stdout
-  
-  # Starts the docker service and enables docker on boot
-  - name: Start Docker service
-    service:
-      name: docker
-      state: started
-      enabled: yes
-
-  # Install the Docker SDK module      
-  - name: Install Docker SDK
-    pip:
-      name: docker
+    # create the database container
+    - name: Create a mariaDB container
+      docker_container:
+        name: db
+        image: 'mariadb:10.3'
+        ports: 
+          - '3306'
+        env:
+          MYSQL_ROOT_PASSWORD: "magento2"
+          MYSQL_DATABASE: "magento2"
+          MYSQL_USER: "magento2"
+          MYSQL_PASSWORD: "magento2"
+        hostname: "db.magento2.docker"
+        volumes:
+          - "{{ root_directory }}/data/db:/var/lib/mysql"
+          - "{{ root_directory }}/config/mysql/conf.d:/etc/mysql/conf.d"
+        networks:
+          - name: magento
+            aliases:
+              - "db.magento2.docker"
