@@ -21,7 +21,7 @@ fi
 if [ -z "$fileName" ]
 then
       echo "fileName flag is empty defaulting to main.yml";
-      filename="main.yml";
+      fileName="main.yml";
 fi
 
 
