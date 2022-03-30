@@ -4,11 +4,13 @@
   become: true
 
   tasks:
-  # Make sure we have the latest yum utils version
-  - name: Install yum utils
+ # Make sure we have the latest yum utils version
+  - name: Install required packages
     yum:
       name: 
         - yum-utils
+        - python3
+        - python3-pip
       state: latest
 
   # Adds the docker-ce repository to the machine
@@ -42,3 +44,8 @@
       name: docker
       state: started
       enabled: yes
+
+  # Install the Docker SDK module      
+  - name: Install Docker SDK
+    pip:
+      name: docker
